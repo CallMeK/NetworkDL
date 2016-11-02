@@ -46,6 +46,7 @@ from logistic_sgd import LogisticRegression, load_data
 from mlp import HiddenLayer
 from dA import dA
 
+import logging
 
 # start-snippet-1
 class SdA(object):

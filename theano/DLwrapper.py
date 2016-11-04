@@ -1,6 +1,7 @@
 #This file provide the sklearn-like API to SdA.py
 import numpy as np
 import logging
+import NSdA
 
 
 class DLwrapper:
@@ -22,14 +23,11 @@ class DLwrapper:
         self.input_dim = X.shape[1]
         self.training_N = X.shape[0]
         logging.info("Training Start")
-        from SdA import train
-        self.weights = SdA.train(X,Y,)
+        self.weights = NSdA.train(X,Y,)
 
     def predict(self,X):
-        assert X.shape[0] == Y.shape[0]
         logging.info("Test Start")
-        from SdA import predict
-        Y_pred = SdA.predict(X)
+        Y_pred = NSdA.predict(X)
 
     def compute_score(self,Y_predict,Y_true):
         return np.sum(Y_predict == Y_true)

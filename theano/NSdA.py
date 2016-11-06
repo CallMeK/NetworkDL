@@ -144,7 +144,7 @@ class SdA(object):
         # minibatch given by self.x and self.y
         self.final_presentation = self.sigmoid_layers[-1].output
 
-        self.output = self.logLayer.output
+        self.output = self.logLayer.y_pred
 
         # This is the actual classification error
         self.errors = self.logLayer.errors(self.y)
@@ -355,7 +355,7 @@ def train(X_train,Y_train,network,
 
     Y_train,labels = createDigitLabel(Y_train)
 
-    logging.info('Classes: ',len(np.unique(Y_train)))
+    logging.info('Classes: %d',len(np.unique(Y_train)))
 
     N = X_train.shape[0]
 
@@ -376,7 +376,7 @@ def train(X_train,Y_train,network,
     # numpy random generator
     # start-snippet-3
     numpy_rng = np.random.RandomState(12345)
-    logging.log('... building the model')
+    logging.info('... building the model')
     # construct the stacked denoising autoencoder class
     sda = SdA(
         numpy_rng=numpy_rng,
@@ -388,11 +388,11 @@ def train(X_train,Y_train,network,
     #########################
     # PRETRAINING THE MODEL #
     #########################
-    logging.log('... getting the pretraining functions')
+    logging.info('... getting the pretraining functions')
     pretraining_fns = sda.pretraining_functions(train_set_x=train_set_x,
                                                 batch_size=batch_size)
 
-    logging.log('... pre-training the model')
+    logging.info('... pre-training the model')
     start_time = timeit.default_timer()
     ## Pre-train layer-wise
     corruption_levels = [corruption_value]*len(network)
@@ -420,7 +420,7 @@ def train(X_train,Y_train,network,
 
     # get the training, validation and testing function for the model
     logging.info('... getting the finetuning functions')
-    train_fn, validate_model, test_model= sda.build_finetune_functions(
+    train_fn, validate_model = sda.build_finetune_functions(
         datasets=datasets,
         batch_size=batch_size,
         learning_rate=finetune_lr
@@ -454,7 +454,7 @@ def train(X_train,Y_train,network,
             if (iter + 1) % validation_frequency == 0:
                 validation_losses = validate_model()
                 this_validation_loss = np.mean(validation_losses)
-                print('epoch %i, minibatch %i/%i, validation error %f %%' %
+                logging.info('epoch %i, minibatch %i/%i, validation error %f %%' %
                       (epoch, minibatch_index + 1, n_train_batches,
                        this_validation_loss * 100.))
 
@@ -491,7 +491,7 @@ def train(X_train,Y_train,network,
     np.save('weights.npy',sda.dA_layers[0].W.get_value(borrow=True))
     np.save('training_final.npy',np.array(sda.finaloutput(train_set_x_all)))
 
-    return sda
+    return sda,labels
 
 def predict(X_test,sda):
     train_set_x = shared_data(X_test)

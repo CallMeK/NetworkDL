@@ -601,10 +601,10 @@ def createfig():
 if __name__ == '__main__':
     import numpy as np
     network = [960,480,80]
-    X_train = 'X_train.npy'
-    X_test = 'X_test.npy'
-    Y_train = 'Y_train.npy'
-    Y_test = 'Y_test.npy'
+    X_train = "../Extension/AdjmatData/8/X_data_image.npy"
+    X_test = X_train
+    Y_train = '../Extension/AdjmatData/8/Y_data.npy'
+    Y_test = Y_train
     test_SdA(X_train,X_test,Y_train,Y_test,network,
         pretraining_epochs=10,training_epochs=200,corruption_value=float(sys.argv[1]),outputfile=sys.argv[2],batch_size=100,finetune_lr=0.1)
     createfig()

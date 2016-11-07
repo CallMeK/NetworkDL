@@ -1,4 +1,4 @@
 # NetworkDL
 Network Classification
 
-This project consists all the codes used for the paper.
+This project consists all the codes used for the paper on network classification.

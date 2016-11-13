@@ -22,8 +22,8 @@ report = pd.DataFrame(columns = ['Nodes','FeatureType','Method','Score','Error']
 print "Logistic Regression, image"
 
 row_id = 0
-lr_model = LR(C=1.0)
-rf_model = RF(500)
+lr_model = LR(C=10)
+rf_model = RF(500,max_features="log2")
 
 methods_lib = {'LR':lr_model,'RF':rf_model}
 
@@ -44,7 +44,7 @@ for method in methods_lib:
         report.loc[row_id] = [d, 'image', method, "%.3f" %score_mean, "%.3f" %score_std]
         row_id = row_id + 1
 
-report.to_csv('results/LR_RF.csv')
+report.to_csv('results/LR_RF_3.csv')
 
 
 

@@ -1,0 +1,7 @@
+,Nodes,FeatureType,Method,Score,Error
+0,8.0,image,RF,0.520,0.012
+1,16.0,image,RF,0.692,0.010
+2,32.0,image,RF,0.784,0.011
+3,8.0,image,LR,0.543,0.017
+4,16.0,image,LR,0.701,0.013
+5,32.0,image,LR,0.757,0.012

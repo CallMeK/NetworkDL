@@ -429,7 +429,7 @@ def train(X_train,Y_train,network,
     logging.info('... finetunning the model')
     # early-stopping parameters
     patience = 10 * n_train_batches  # look as this many examples regardless
-    patience_increase = 2.  # wait this much longer when a new best is
+    patience_increase = 3.  # wait this much longer when a new best is
                             # found
     improvement_threshold = 0.995  # a relative improvement of this much is
                                    # considered significant

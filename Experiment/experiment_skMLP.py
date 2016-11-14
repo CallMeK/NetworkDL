@@ -3,9 +3,8 @@
 
 import numpy as np
 from sklearn.model_selection import cross_val_score
-from sklearn.linear_model import LogisticRegression as LR
-from sklearn.ensemble import RandomForestClassifier as RF
 import pandas as pd
+from sklearn.neural_network import MLPClassifier as MLP
 
 class Experiment(object):
     def __init__(self,modelobj,X,Y):
@@ -19,21 +18,17 @@ class Experiment(object):
 data_folder_dir = "../Extension/AdjmatData/"
 report = pd.DataFrame(columns = ['Nodes','FeatureType','Method','Score','Error'])
 
-print "Logistic Regression, image"
+print "Deep Learning, image"
 
 row_id = 0
-lr_model = LR(C=10000)
-rf_model = RF(500,max_features="log2")
-
-methods_lib = {'LR':lr_model}#,'RF':rf_model}
 
 
-for method in methods_lib:
+for method in ['MLP']:
     for d in [8,16,32]:
         X = np.load(data_folder_dir + ("/%d/" %d) + 'X_data_image.npy')
         Y = np.load(data_folder_dir + ("/%d/" %d) + 'Y_data.npy')
 
-        modelobj = methods_lib[method]
+        modelobj = MLP(hidden_layer_sizes=[200,100,50,50])#,solver='sgd', learning_rate='constant',learning_rate_init=0.1)
         experiment = Experiment(modelobj, X, Y)
 
         scores = experiment.CV_scores()
@@ -44,7 +39,7 @@ for method in methods_lib:
         report.loc[row_id] = [d, 'image', method, "%.3f" %score_mean, "%.3f" %score_std]
         row_id = row_id + 1
 
-report.to_csv('results/LR_noRegul.csv')
+report.to_csv('results/MLP_SGD.csv')
 
 
 

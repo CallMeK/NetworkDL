@@ -2,14 +2,17 @@
 import numpy as np
 import logging
 import NSdA
+from sklearn.base import BaseEstimator, ClassifierMixin
 
+class DLwrapper(BaseEstimator, ClassifierMixin):
 
-class DLwrapper:
+    VALIDATION_RATIO = 0.1
+
     def __init__(self,layers=[100],pretraining_epochs=10,training_epochs=200,
                  corruption_value=0.0,batch_size=100,pretrain_lr=0.1,finetune_lr=0.1):
-        default_logging_name = "-".join([str(l) for l in layers]) + "-"+ str(pretraining_epochs)+"-" + str(training_epochs) + \
+        default_logging_name = "-".join([str(l) for l in layers]) + "-"+ str(pretraining_epochs)+"-" + str(training_epochs) + "-" + \
                                str(corruption_value) + "-" + str(finetune_lr)
-        logging.basicConfig(format='%(asctime)s %(message)s',filename=default_logging_name + '.log', filemode='w', level=logging.DEBUG)
+        logging.basicConfig(format='%(asctime)s %(message)s',filename="logs/" + default_logging_name + '.log', filemode='w', level=logging.DEBUG)
         self.layers = layers
         self.pretraining_epochs = pretraining_epochs
         self.training_epochs = training_epochs
@@ -29,7 +32,7 @@ class DLwrapper:
               training_epochs=self.training_epochs,
               batch_size=self.batch_size,
               corruption_value=self.corruption_value,
-              validation_ratio=0.2)
+              validation_ratio=self.VALIDATION_RATIO)
         self.labels = np.array(self.labels)
 
     def predict(self,X):
@@ -45,7 +48,7 @@ class DLwrapper:
         assert X.shape[0] == Y.shape[0]
         logging.info("Score")
         Y_pred = self.predict(X)
-        return Y_pred
+        return self.compute_score(Y_pred,Y)
 
 
 if __name__ == "__main__":
